@@ -43,6 +43,10 @@ Once that's done, put the [b]Update_KUALBooklet_v*_install.bin[/b] file (found i
 
 Finally, enter [b];log mrpi[/b] in the Homescreen's searchbar (in a similar fashion as what you had to do during the Jailbreak), and wait for MRPI to do its thing.
 When the UI finishes restarting, you should end up with a KUAL entry in your Library (showing as a personal document).
+
+[b]NOTE for KOA2 owners:[/b]
+Your JailBreak is specific to this device, as such, you can disregard the mentions of the "hotfix", yours will by definition be good enough for the job at hand ;).
+Do take a look at the final entry in the FAQ, you will *most likely* need to use @coplate's patched version of the Booklet variant, so you might as well start with it to save you some trouble!
 [/INDENT][/SPOILER]
 
 [b]KUAL extensions:[/b]
