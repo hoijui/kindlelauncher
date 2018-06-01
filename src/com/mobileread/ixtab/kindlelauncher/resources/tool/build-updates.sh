@@ -8,7 +8,7 @@ PKGNAME="${HACKNAME}"
 PKGVER="${1%%-g*}"
 
 # Setup KindleTool packaging metadata flags to avoid cluttering the invocations
-KT_PM_FLAGS=( "-x 'PackageName=${PKGNAME}'" "-x 'PackageVersion=${1}'" "-x 'PackageAuthor=ixtab, NiLuJe, twobob, stepk'" "-x 'PackageMaintainer=NiLuJe'" "-X" )
+KT_PM_FLAGS=( "-xPackageName=${PKGNAME}" "-xPackageVersion=${1}" "-xPackageAuthor=ixtab, NiLuJe, twobob, stepk" "-xPackageMaintainer=NiLuJe" "-X" )
 
 # We need kindletool (https://github.com/NiLuJe/KindleTool) in $PATH
 if (( $(kindletool version | wc -l) == 1 )) ; then
