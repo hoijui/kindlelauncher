@@ -1,5 +1,10 @@
 CHANGE LOG
 
+20190128
++ Update the atime in the ccdb on Booklet exit
+  Ensures the Booklet variant will be sorted properly when sorting by
+  "Recent".
+
 20181108
 + Detect the Kindle PaperWhite 4.
 
