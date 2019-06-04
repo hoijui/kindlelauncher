@@ -14,7 +14,7 @@ Moreover, it's universal! It'll run on (pretty much) anything, as long as it's r
 [INDENT]
 Added information about KOA2/PW4/KT4 support, as well as FW >= 5.9.x in general. Do read the instructions until the end to see which method applies to your specific device.
 
-All downloads have been moved to the [url=https://www.mobileread.com/forums/showthread.php?t=225030]Snapshots[/url] thread!
+[COLOR="Red"][b]PSA:[/b][/COLOR] All downloads have been moved to the [url=https://www.mobileread.com/forums/showthread.php?t=225030]Snapshots[/url] thread!
 [/INDENT]
 
 
