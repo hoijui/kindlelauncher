@@ -1,5 +1,8 @@
 CHANGE LOG
 
+20190724
++ Detect the Kindle Oasis 3.
+
 20190412
 + Detect the Kindle Basic 3.
 
