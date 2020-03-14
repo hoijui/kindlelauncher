@@ -3,4 +3,5 @@ lib/kaf.jar
 lib/utilities.jar
 lib/kindle/*.jar
 build-local.properties
+buildNumber.properties
 /target/

@@ -1,0 +1,760 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<project.build.encoding>UTF-8</project.build.encoding>
+		<project.build.sourceEncoding>${project.build.encoding}</project.build.sourceEncoding>
+		<project.build.resourceEncoding>${project.build.encoding}</project.build.resourceEncoding>
+
+		<sign.keystore.file>developer.keystore</sign.keystore.file>
+		<sign.keystore.password>password</sign.keystore.password>
+		<sign.aliases>test</sign.aliases>
+
+		<project.mainClass>com.mobileread.ixtab.kindlelauncher.KualKindlet</project.mainClass>
+	</properties>
+
+	<groupId>org.mykindlets</groupId>
+	<artifactId>kindlelauncher</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<packaging>jar</packaging>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<name>KUAL</name>
+	<description>
+		TODO
+	</description>
+	<organization>
+		<name>Universitat Pompeu Fabra</name>
+		<url>http://www.ibe.upf-csic.es/</url>
+	</organization>
+	<url>http://www.gwaspi.org</url>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL), version 3 or later</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Robin Vobruba</name>
+			<email>hoijui.quaero@gmail.com</email>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/GWASpi/GWASpi</connection>
+		<developerConnection>scm:git:git@github.com:GWASpi/GWASpi.git</developerConnection>
+		<url>http://github.com/GWASpi/GWASpi</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.13</version>
+				<configuration>
+					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+					<linkXref>true</linkXref>
+					<!--
+						Loaded from the classpath, from the artifact:
+							com.springrts:resources
+						which is added as a plugin dependency under:
+							build - plugins - plugin
+							- org.apache.maven.plugins:maven-checkstyle-plugin
+					<configLocation>src/main/resources/config/upf_checks.xml</configLocation>
+					-->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<linkXref>true</linkXref>
+					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+					<minimumTokens>50</minimumTokens>
+					<targetJdk>1.6</targetJdk>
+					<aggregate>true</aggregate>
+					<!--
+					<rulesets>
+						<ruleset>${basedir}/src/main/resources/pmd.xml</ruleset>
+					</rulesets>
+					-->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<!--
+						This is a list of tests to ignore.
+						It consists of bare class-names.
+						The default classes are in the package edu.umd.cs.findbugs.detect,
+						and can be found here:
+						https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
+					-->
+					<omitVisitors>FindDeadLocalStores,DefaultEncodingDetector</omitVisitors>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changelog-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<tagListOptions>
+						<tagClasses>
+							<tagClass>
+								<displayName>Should be done</displayName>
+								<tags>
+									<tag>
+										<matchString>TODO</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+									<tag>
+										<matchString>XXX</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+									<tag>
+										<matchString>HACK</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+
+							<tagClass>
+								<displayName>Has to be done</displayName>
+								<tags>
+									<tag>
+										<matchString>FIXME</matchString>
+										<matchType>exact</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+							<tagClass>
+								<displayName>To be considered</displayName>
+								<tags>
+									<tag>
+										<matchString>NOTE</matchString>
+										<matchType>exact</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+						</tagClasses>
+					</tagListOptions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.19.1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<version>2.1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>emma-maven-plugin</artifactId>
+				<version>1.0-alpha-3</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>META-INF/**/*</include>
+					<include>img/**/*</include>
+					<include>samples/**/*</include>
+					<include>logback.xml</include>
+					<include>version.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>.</directory>
+				<targetPath>META-INF/gwaspi</targetPath>
+				<includes>
+					<include>LICENSE</include>
+					<include>README.markdown</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<shortRevisionLength>7</shortRevisionLength>
+					<revisionOnScmFailure>0000000</revisionOnScmFailure>
+					<format>{0}-{1,date,yyyyMMdd-HHmmss}-{2,number,integer}</format>
+					<items>
+						<item>scmVersion</item>
+						<item>timestamp</item>
+						<item>buildNumber0</item>
+					</items>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<compilerArguments>
+						<Xlint:unchecked/>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.5</version>
+				<inherited>true</inherited>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${project.mainClass}</mainClass>
+							<!-- These allow us to easily find out the project version at runtime. -->
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+							<Build-Timestamp>${timestamp}</Build-Timestamp>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<encoding>${project.build.resourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${project.mainClass}</mainClass>
+					<!--
+						NOTE
+						We need the following two lines so the Derby DB withing Hibernate
+						does not prevent the JVM from exiting at the end of a scripted/non-GUI
+						run of GWASpi.
+						It is related to a "bug" in `java.util.Timer`; more about that here:
+						http://mojo.codehaus.org/exec-maven-plugin/java-mojo.html#stopUnresponsiveDaemonThreads
+					-->
+					<daemonThreadJoinTimeout>1000</daemonThreadJoinTimeout>
+					<stopUnresponsiveDaemonThreads>true</stopUnresponsiveDaemonThreads>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>${project.mainClass}</mainClass>
+							<!-- These allow us to easily find out the project version at runtime. -->
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+							<Build-Timestamp>${timestamp}</Build-Timestamp>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+					<useFile>false</useFile>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.1.5</version>
+				<configuration>
+					<targetClasses>
+						<param>org.gwaspi.model*</param>
+					</targetClasses>
+					<targetTests>
+						<param>org.gwaspi.gui*</param>
+						<param>org.gwaspi.model*</param>
+					</targetTests>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/sdk/xercesImpl.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.0.b2</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/sdk/xml-apis.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>backport-util-concurrent</groupId>
+			<artifactId>backport-util-concurrent</artifactId>
+			<version>3.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/backport-util-concurrent-3.1.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>booklet</groupId>
+			<artifactId>booklet</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/booklet.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>framework-api</groupId>
+			<artifactId>framework-api</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/framework-api.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>framework-impl</groupId>
+			<artifactId>framework-impl</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/framework-impl.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>HTMLReader-impl</groupId>
+			<artifactId>HTMLReader-impl</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/HTMLReader-impl.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>2.6.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/icu4j.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>jdbm</groupId>
+			<artifactId>jdbm</artifactId>
+			<version>1.0</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/jdbm.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>JFEP</groupId>
+			<artifactId>JFEP</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/JFEP-0.1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>Journal-update</groupId>
+			<artifactId>Journal-update</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/Journal-update.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/json.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/json_simple-1.1.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>KindleDeviceServicesAbstraction-1.0</groupId>
+			<artifactId>KindleDeviceServicesAbstraction-1.0</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindleDeviceServicesAbstraction-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>KindleDeviceServicesShasta-1.0</groupId>
+			<artifactId>KindleDeviceServicesShasta-1.0</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindleDeviceServicesShasta-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>KindleGUIAbstraction-1.0</groupId>
+			<artifactId>KindleGUIAbstraction-1.0</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindleGUIAbstraction-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>KindleGUIShasta-1.0</groupId>
+			<artifactId>KindleGUIShasta-1.0</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindleGUIShasta-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>kindlePageNumbersDeviceReader</groupId>
+			<artifactId>kindlePageNumbersDeviceReader</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/kindlePageNumbersDeviceReader.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>Kindlet-1.2</groupId>
+			<artifactId>Kindlet-1.2</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/Kindlet-1.2.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>KindletBookletDRM-1.0</groupId>
+			<artifactId>KindletBookletDRM-1.0</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindletBookletDRM-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>KindletImplementation-1.2</groupId>
+			<artifactId>KindletImplementation-1.2</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/KindletImplementation-1.2.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.kxml</groupId>
+			<artifactId>kxml2</artifactId>
+			<version>2.3.0</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/kxml2.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers</artifactId>
+			<version>2.4.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/lucene-analyzers-2.4.1.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>2.4.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/lucene-core-2.4.1.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-snowball</artifactId>
+			<version>2.4.1</version>
+			<!--<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/lucene-snowball-2.4.1.jar</systemPath>-->
+		</dependency>
+		<dependency>
+			<groupId>mobi8sdk</groupId>
+			<artifactId>mobi8sdk</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/mobi8sdk.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>MobiCore-impl</groupId>
+			<artifactId>MobiCore-impl</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/MobiCore-impl.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>MobipocketCoreReader</groupId>
+			<artifactId>MobipocketCoreReader</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/MobipocketCoreReader.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>PDFReader-impl</groupId>
+			<artifactId>PDFReader-impl</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/PDFReader-impl.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>portability-impl</groupId>
+			<artifactId>portability-impl</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/portability-impl.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>portability</groupId>
+			<artifactId>portability</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/portability.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>ReaderSDK</groupId>
+			<artifactId>ReaderSDK</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/ReaderSDK.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>SearchSDK</groupId>
+			<artifactId>SearchSDK</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/SearchSDK.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>utilities</groupId>
+			<artifactId>utilities</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/utilities.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>xyml</groupId>
+			<artifactId>xyml</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kindle/xyml.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jailbreak</groupId>
+			<artifactId>jailbreak</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jailbreak.jar</systemPath>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>JPA-Hibernate</id>
+			<!--
+				We use Hibernate as the (default activated) JPA provider.
+				NOTE To use an other one, add an other profile for it.
+			-->
+			<activation>
+				<!--
+					Specify this property to deactivate the profile.
+					This is preffered to activeByDefault, see explanation here:
+					http://www.andrewspencer.net/2011/maven-profile-best-practices/
+					It also prevent the profile to be inactive during the test phase,
+					which makes the tests fail.
+				-->
+				<property>
+					<name>!excludeHibernate</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>4.3.6.Final</version>
+					<scope>runtime</scope>
+					<optional>true</optional>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>compileWithJava6</id>
+			<!--
+				NOTE
+				Make sure to set the environment variable JAVA6_HOME
+				to your JDK 1.6 HOME when using this profile.
+			-->
+			<properties>
+				<java.6.home>${env.JAVA6_HOME}</java.6.home>
+				<java.6.libs>${java.6.home}/jre/lib</java.6.libs>
+				<java.6.bootclasspath>${java.6.libs}/rt.jar${path.separator}${java.6.libs}/jce.jar</java.6.bootclasspath>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>1.6</source>
+							<target>1.6</target>
+							<encoding>${project.build.sourceEncoding}</encoding>
+							<showDeprecation>true</showDeprecation>
+							<showWarnings>true</showWarnings>
+							<compilerArguments>
+								<Xlint:unchecked/>
+								<bootclasspath>${java.6.bootclasspath}</bootclasspath>
+							</compilerArguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>createUniqueBuild</id>
+			<!--
+				For unknown reasons, the test will fail with
+				this profile activated, therefore ...
+				NOTE Only use this with unit tests deactivated:
+					`-DskipTests`
+			-->
+			<build>
+				<finalName>${project.artifactId}-${project.version}-g${buildNumber}</finalName>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
+
