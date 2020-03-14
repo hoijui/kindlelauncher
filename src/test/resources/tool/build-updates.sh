@@ -35,8 +35,8 @@ kindletool create ota2 -d kindle5 -s 1679530004 -C ../booklet/install Update_${P
 kindletool create ota2 -d kindle5 -C ../booklet/uninstall Update_${PKGNAME}_${PKGVER}_uninstall.bin
 
 # Move our updates
-rm -f ../dist/*.bin
-mv -f *.bin ../dist/
+rm -f ../target/*.bin
+mv -f *.bin ../target/
 
 # Cleanup behind us
 rm -f ../booklet/install/libotautils5  ../booklet/uninstall/libotautils5 ../booklet/install/KUALBooklet.jar

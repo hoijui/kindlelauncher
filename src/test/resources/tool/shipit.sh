@@ -19,23 +19,23 @@ echo "Packaging KUAL ${KUAL_VERSION} (${KUAL_DATE}) . . ."
 WD="${0%/*}"
 cd "${WD}"
 
-# Clean dist directory...
-rm -f ../../../../../../../dist/*.tar.xz
+# Clean target directory...
+rm -f ../../../../../../../target/*.tar.xz
 
 # Build the Booklet update package
 ./build-updates.sh "${KUAL_VERSION}"
 
 # Make Windows users happy...
-unix2dos -k ../dist/*.txt ../../../../../../../*.txt
+unix2dos -k ../target/*.txt ../../../../../../../*.txt
 
 # And package it (flatten the directory structure)
-tar --exclude='MR_THREAD.txt' --transform 's,^.*/,,S' --show-transformed-names -cvJf ../../../../../../../dist/KUAL-${KUAL_VERSION}-${KUAL_DATE}.tar.xz ../dist/* ../../../../../../../*.azw2 ../../../../../../../*.txt
+tar --exclude='MR_THREAD.txt' --transform 's,^.*/,,S' --show-transformed-names -cvJf ../../../../../../../target/KUAL-${KUAL_VERSION}-${KUAL_DATE}.tar.xz ../target/* ../../../../../../../*.azw2 ../../../../../../../*.txt
 
 # Git handles this properly, but it shouts at us a bit...
-dos2unix -k ../dist/*.txt ../../../../../../../*.txt
+dos2unix -k ../target/*.txt ../../../../../../../*.txt
 
 # Cleanup behind build-updates
-rm -f ../dist/*.bin
+rm -f ../target/*.bin
 
 # Go back
 cd - &>/dev/null

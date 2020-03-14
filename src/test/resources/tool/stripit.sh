@@ -15,4 +15,4 @@ if [[ "$(env gawk --version 2>/dev/null | grep -e 'GNU Awk' | cut -c 9)" -lt "3"
 	exit 1
 fi
 
-echo "y" | env gawk -f ${WD}/strip.awk -v AWK=1 ${WD}/../parse-commented.awk > ${WD}/../parse.awk
+echo "y" | env gawk -f ${WD}/strip.awk -v AWK=1 target/parse-commented.awk > target/com/mobileread/ixtab/kindlelauncher/resources/parse.awk
