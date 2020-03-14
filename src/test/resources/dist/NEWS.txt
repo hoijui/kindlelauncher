@@ -1,5 +1,23 @@
 CHANGE LOG
 
+20190724
++ Detect the Kindle Oasis 3.
+
+20190412
++ Detect the Kindle Basic 3.
+
+20190128
++ Update the atime in the ccdb on Booklet exit
+  Ensures the Booklet variant will be sorted properly when sorting by
+  "Recent".
+
+20181108
++ Detect the Kindle PaperWhite 4.
+
+20171124
++ Detect the 32GB 'Manga' PW3.
++ Detect the Kindle Oasis 2.
+
 **** v2.7 ****
 
 20160719

@@ -27,8 +27,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.lang.reflect.Method;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.amazon.kindle.booklet.AbstractBooklet;
 import com.amazon.kindle.booklet.BookletContext;
+import com.amazon.kindle.restricted.content.catalog.ContentCatalog;
+import com.amazon.kindle.restricted.runtime.Framework;
 import com.mobileread.ixtab.kindlelauncher.resources.KualEntry;
 import com.mobileread.ixtab.kindlelauncher.resources.KualLog;
 import com.mobileread.ixtab.kindlelauncher.resources.KualMenu;
@@ -134,6 +139,63 @@ public class KualBooklet extends AbstractBooklet implements ActionListener {
 				throw new RuntimeException(t.toString());
 			}
 		}
+	}
+
+	// And this was always obfuscated...
+	// NOTE: Pilfered from KPVBooklet (https://github.com/koreader/kpvbooklet/blob/master/src/com/github/chrox/kpvbooklet/ccadapter/CCAdapter.java)
+	/**
+	 * Perform CC request of type "query" and "change"
+	 * @param req_type request type of "query" or "change"
+	 * @param req_json request json string
+	 * @return return json object
+	 */
+	private JSONObject ccPerform(String req_type, String req_json) {
+		ContentCatalog CC = (ContentCatalog) Framework.getService(ContentCatalog.class);
+		try {
+			Method perform = null;
+
+			// Enumeration approach
+			Class[] signature = {String.class, String.class, int.class, int.class};
+			Method[] methods = ContentCatalog.class.getDeclaredMethods();
+			for (int i = 0; i < methods.length; i++) {
+				Class[] params = methods[i].getParameterTypes();
+				if (params.length == signature.length) {
+					int j;
+					for (j = 0; j < signature.length && params[j].isAssignableFrom( signature[j] ); j++ ) {}
+					if (j == signature.length) {
+						perform = methods[i];
+						break;
+					}
+				}
+			}
+
+			if (perform != null) {
+				JSONObject json = (JSONObject) perform.invoke(CC, new Object[] { req_type, req_json, new Integer(200), new Integer(5) });
+				return json;
+			}
+			else {
+				new KualLog().append("Failed to find perform method, last access time won't be set on exit!");
+				return new JSONObject();
+			}
+		} catch (Throwable t) {
+			throw new RuntimeException(t.toString());
+		}
+	}
+
+	// NOTE: Again, adapted from KPVBooklet ;)
+	private void updateCCDB() {
+		long lastAccess = new Date().getTime() / 1000L;
+		String tag = "KUAL";	// Fancy sash in the top right corner of the thumbnail ;)
+		// NOTE: Hard-code the path, as no-one should be using a custom .kual trigger...
+		String path = JSONObject.escape("/mnt/us/documents/KUAL.kual");
+		String json_query = "{\"filter\":{\"Equals\":{\"value\":\"" + path + "\",\"path\":\"location\"}},\"type\":\"QueryRequest\",\"maxResults\":1,\"sortOrder\":[{\"order\":\"descending\",\"path\":\"lastAccess\"},{\"order\":\"ascending\",\"path\":\"titles[0].collation\"}],\"startIndex\":0,\"id\":1,\"resultType\":\"fast\"}";
+		JSONObject json = ccPerform("query", json_query);
+		JSONArray values = (JSONArray) json.get("values");
+		JSONObject value = (JSONObject) values.get(0);
+		String uuid = (String) value.get("uuid");
+		String json_change = "{\"commands\":[{\"update\":{\"uuid\":\"" + uuid + "\",\"lastAccess\":" + lastAccess + ",\"displayTags\":[\"" + tag + "\"]" + "}}],\"type\":\"ChangeRequest\",\"id\":1}";
+		ccPerform("change", json_change);
+		//new KualLog().append("Set KUAL's lastAccess ccdb entry to " + lastAccess);
 	}
 
 	private void suicide(BookletContext context) {
@@ -835,6 +897,7 @@ public class KualBooklet extends AbstractBooklet implements ActionListener {
 			//	 so sleep for a tiny bit so our commandToRunOnExit actually has a chance to run...
 			Thread.sleep(175);
 			cleanupTemporaryDirectory();
+			updateCCDB();
 		} catch (Exception ignored) {
 			// Avoid the framework shouting at us...
 		}

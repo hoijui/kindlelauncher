@@ -7,6 +7,9 @@ HACKNAME="KUALBooklet"
 PKGNAME="${HACKNAME}"
 PKGVER="${1%%-g*}"
 
+# Setup KindleTool packaging metadata flags to avoid cluttering the invocations
+KT_PM_FLAGS=( "-xPackageName=${PKGNAME}" "-xPackageVersion=${1}" "-xPackageAuthor=ixtab, NiLuJe, twobob, stepk" "-xPackageMaintainer=NiLuJe" "-X" )
+
 # We need kindletool (https://github.com/NiLuJe/KindleTool) in $PATH
 if (( $(kindletool version | wc -l) == 1 )) ; then
 	HAS_KINDLETOOL="true"
@@ -29,10 +32,13 @@ svn cat http://svn.ak-team.com/svn/Configs/trunk/Kindle/Touch_Hacks/Common/lib/l
 # Also, we kind of need the Booklet itself ;).
 cp -f ../../../../../../../KUALBooklet.jar ../booklet/install/KUALBooklet.jar
 
+# NOTE: Don't even bother with the Booklet on Zelda & Rex, as they'll always be on FW >= 5.9
 # Install (>= 5.1.2)
-kindletool create ota2 -d kindle5 -s 1679530004 -C ../booklet/install Update_${PKGNAME}_${PKGVER}_install.bin
+kindletool create ota2 "${KT_PM_FLAGS[@]}" -d touch -d paperwhite -d paperwhite2 -d basic -d voyage -d paperwhite3 -d oasis -d basic2 -s 1679530004 -C ../booklet/install Update_${PKGNAME}_${PKGVER}_install.bin
+# Hotfix (>= 5.12.2, so don't even bother with devices EoL'ed before that)
+kindletool create ota2 -d paperwhite2 -d basic -d voyage -d paperwhite3 -d oasis -d basic2 -O -s 3556150002 -C ../booklet/install Update_${PKGNAME}_hotfix_${PKGVER}_install.bin
 # Uninstall
-kindletool create ota2 -d kindle5 -C ../booklet/uninstall Update_${PKGNAME}_${PKGVER}_uninstall.bin
+kindletool create ota2 "${KT_PM_FLAGS[@]}" -d kindle5 -C ../booklet/uninstall Update_${PKGNAME}_${PKGVER}_uninstall.bin
 
 # Move our updates
 rm -f ../target/*.bin
